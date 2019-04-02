@@ -1,6 +1,8 @@
 import java.util.Date;
+import java.io.*;
 
-public class Message implements Comparable<Message>{
+public class Message implements Comparable<Message>, java.io.Serializable{
+	private static final long serialVersionUID = -9046610004769247786L;
 	private String caller;
 	private Date datetime;
 	private String message;
@@ -25,5 +27,14 @@ public class Message implements Comparable<Message>{
 	
 	public int compareTo(Message m) {
 		return datetime.compareTo(m.getDateTime());
+	}
+	
+	// serialize functions
+	public final void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.defaultWriteObject();
+	}
+	
+	public final void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+		ois.defaultReadObject();
 	}
 }
