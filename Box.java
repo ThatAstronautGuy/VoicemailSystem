@@ -5,7 +5,7 @@ public class Box {
 	private String greeting;
 	private boolean loginStatus;
 	private ArrayList<Message> messages = new ArrayList<Message>();
-	private int passcode;
+	private String passcode;
 	
 	public Box(int boxID) {
 		this.boxID = boxID;
@@ -26,22 +26,24 @@ public class Box {
 		}
 	}
 	
-	public void changePasscode(int passcode) throws InvalidPin, NotLoggedIn {
+	public void changePasscode(String passcode) throws InvalidPin, NotLoggedIn {
 		if(loginStatus == true) {
-			if(passcode < 0) {
-				throw new InvalidPin("Invalid pin: pin is negative");
+			try {
+				int num = Integer.parseInt(passcode);
+				if(num < 0) {
+					throw new InvalidPin("Invalid pin: pin is negative");
+				}
+				else {
+					this.passcode = passcode;
+				}
 			}
-			else {
-				this.passcode = passcode;
+			catch (NumberFormatException e){
+				throw new InvalidPin("Invalid pin: not a number");
 			}
 		}
 		else {
 			throw new NotLoggedIn("Not logged in: access denied");
 		}
-	}
-	
-	public void compareTo() {
-		// TODO
 	}
 	
 	public void deleteMessage(int index) throws NotLoggedIn, InvalidIndex {
@@ -82,13 +84,21 @@ public class Box {
 			throw new NotLoggedIn("Not logged in: access denied");
 		}
 	}
+
+	public int getBoxID() {
+		return boxID;
+	}
 	
-	public boolean login(int passcode) throws AlreadyLoggedIn, IncorrectPin {
+	public String getGreeting() {
+		return greeting;
+	}
+	
+	public boolean login(String passcode) throws AlreadyLoggedIn, IncorrectPin {
 		if(loginStatus == true) {
 			throw new AlreadyLoggedIn("Already logged in: please logout first");
 		}
 		else {
-			if(this.passcode == passcode) {
+			if(this.passcode.contentEquals(passcode)) {
 				loginStatus = true;
 				return true;
 			}
