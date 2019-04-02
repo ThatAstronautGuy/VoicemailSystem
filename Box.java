@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.io.*;
 
-public class Box {
+public class Box implements java.io.Serializable {
+	private static final long serialVersionUID = -8961537260269159115L;
 	private int boxID;
 	private String greeting;
-	private boolean loginStatus;
+	private transient boolean loginStatus;
 	private ArrayList<Message> messages = new ArrayList<Message>();
 	private String passcode;
 	
@@ -130,33 +132,52 @@ public class Box {
 		}
 	}
 	
+	// serialize functions
+	public final void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.defaultWriteObject();
+	}
+	
+	public final void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+		ois.defaultReadObject();
+	}
+	
 	
 	// exception classes
 	public class InvalidPin extends Exception{
+		private static final long serialVersionUID = -4095214552816804474L;
+
 		public InvalidPin(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 	
 	public class NotLoggedIn extends Exception{
+		private static final long serialVersionUID = -5472123155936872795L;
+
 		public NotLoggedIn(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 	
 	public class AlreadyLoggedIn extends Exception{
+		private static final long serialVersionUID = 447120984257737498L;
+
 		public AlreadyLoggedIn(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 	
 	public class IncorrectPin extends Exception {
+		private static final long serialVersionUID = 1772054241922437429L;
+
 		public IncorrectPin(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 	
 	public class InvalidIndex extends Exception {
+		private static final long serialVersionUID = -2238378927268688766L;
+
 		public InvalidIndex(String errorMessage) {
 			super(errorMessage);
 		}
