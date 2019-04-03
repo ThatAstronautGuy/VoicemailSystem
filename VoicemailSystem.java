@@ -221,7 +221,7 @@ public class VoicemailSystem {
 		System.exit(0);
 	}
 	
-	private static void createBox() throws NotLoggedIn {
+	public static void createBox() throws NotLoggedIn {
 		if(adminLoginStatus == true) {
 			System.out.println("Please enter the boxID: ");
 			int boxID = Integer.parseInt(readInput());
