@@ -29,7 +29,7 @@ public class VoicemailSystem {
 		catch(Exception e) {System.out.println(e);}
 		
 		
-		System.out.println("Please enter an extension: ");
+		System.out.println("Please enter 0 to login to your voicemail, 1 to dial a number, and 2 to login to the administrative panel: ");
 		String result = readInput();
 		
 		if(result.equals("0")){
@@ -44,7 +44,7 @@ public class VoicemailSystem {
 			int boxID = Integer.parseInt(readInput());
 			call(boxID);
 		}
-		else if(result.equals("-1")) {
+		else if(result.equals("2")) {
 			System.out.println("Please enter admin passcode: ");
 			String passcode = readInput();
 			try{
@@ -57,12 +57,14 @@ public class VoicemailSystem {
 				finally {System.exit(0);}
 			}
 		}
+		else {
+			System.out.println("Please enter a valid options.");
+		}
 		try {hangup();}
 		catch(Exception ex) {System.out.println(ex);}
 		finally {System.exit(0);}
 	}
 	
-	// not done
 	public static void call(int boxID) {
 		int index = Box.findBoxIdIndex(boxes, boxID);
 		if(index >= 0) {
@@ -190,8 +192,6 @@ public class VoicemailSystem {
 	}
 	
 	public static String readVoice(String message) {
-		// clearing buffer
-		input.nextLine();
 		System.out.println(message);
 		String result = "";
 		String intext = input.nextLine();
