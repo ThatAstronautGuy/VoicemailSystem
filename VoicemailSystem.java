@@ -67,10 +67,7 @@ public class VoicemailSystem {
 		int index = Box.findBoxIdIndex(boxes, boxID);
 		if(index >= 0) {
 			System.out.println(boxes.get(index).getGreeting());
-			// clearing buffer
-			String tmp = input.nextLine();
-			System.out.println("Please leave your message, followed by the # key to signify you are finished.");
-			String result = input.nextLine();
+			String result = readVoice("Please leave your message, followed by the # key to signify you are finished.");
 			if(result.equalsIgnoreCase("H")) {
 				try {hangup();}
 				catch(Exception ex) {System.out.println(ex);}
@@ -109,10 +106,7 @@ public class VoicemailSystem {
 					}
 				}
 				else if(result.equals("2")) {
-					// clearing buffer
-					String tmp = input.nextLine();
-					System.out.println("Please say your new greeting: ");
-					result = input.nextLine();
+					result = readVoice("Please state your new greeting followed by the #");
 					if(result.equalsIgnoreCase("H")) {
 						try {hangup();}
 						catch(Exception ex) {System.out.println(ex);}
@@ -127,8 +121,6 @@ public class VoicemailSystem {
 					
 				}
 				else if(result.equals("3")) {
-					// clearing buffer
-					String tmp = input.nextLine();
 					System.out.println("Please enter your new passcode: ");
 					String newPasscode = readInput();
 					boxes.get(index).changePasscode(newPasscode);
@@ -180,15 +172,39 @@ public class VoicemailSystem {
 	
 	public static String readInput() {
 		String result = "";
-		char ch = input.next().charAt(0);
-		while(ch != '#') {
-			if(ch == 'h' || ch == 'H') {
+		String str = input.nextLine();
+		while(!str.equals("#")) {
+			if(str.equalsIgnoreCase("H")) {
 				try {hangup();}
 				catch(Exception ex) {System.out.println(ex);}
 				finally {System.exit(0);}
 			}
-			result += ch;
-			ch = input.next().charAt(0);
+			if(str.length() == 1) {
+				if(Character.isDigit(str.charAt(0))) {
+					result += str.charAt(0);
+				}
+			}
+			str = input.nextLine();
+		}
+		return result;
+	}
+	
+	public static String readVoice(String message) {
+		// clearing buffer
+		input.nextLine();
+		System.out.println(message);
+		String result = "";
+		String intext = input.nextLine();
+		while(!intext.equals("#")){
+			if(intext.equalsIgnoreCase("H")) {
+				try {hangup();}
+				catch(Exception ex) {System.out.println(ex);}
+				finally {System.exit(0);}
+			}
+			else {
+				result += intext;
+			}
+			intext = input.nextLine();
 		}
 		return result;
 	}
