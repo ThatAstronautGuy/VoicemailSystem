@@ -14,6 +14,17 @@ public class Box implements java.io.Serializable {
 		greeting = "User has not set a greeting.";
 	}
 	
+	public Box(int boxID, String passcode) throws InvalidPin {
+		loginStatus = true;
+		this.boxID = boxID;		
+		try{
+			changePasscode(passcode);
+		}
+		catch (NotLoggedIn e) {}
+		greeting = "User has not set a greeting.";
+		loginStatus = false;
+	}
+	
 	public void changeGreeting(String greeting) throws NotLoggedIn {
 		if(loginStatus == true) {
 			if(greeting.length() == 0) {
@@ -130,6 +141,15 @@ public class Box implements java.io.Serializable {
 		else {
 			throw new NotLoggedIn("Not logged in: access denied"); 
 		}
+	}
+	
+	public static int findBoxIdIndex(ArrayList<Box> boxes, int boxID) {
+		for(int i = 0; i < boxes.size(); i++) {
+			if(boxes.get(i).getBoxID() == boxID) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	// serialize functions
