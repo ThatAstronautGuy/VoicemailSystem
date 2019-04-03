@@ -17,8 +17,6 @@ public class VoicemailSystem {
 				FileInputStream fis = new FileInputStream(datfile);
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				boxes = (ArrayList<Box>) ois.readObject();
-				//System.out.println(boxes.size());
-				//System.out.println("read");
 				ois.close();
 				fis.close();
 			}
@@ -68,15 +66,23 @@ public class VoicemailSystem {
 	public static void call(int boxID) {
 		int index = Box.findBoxIdIndex(boxes, boxID);
 		if(index >= 0) {
-			System.out.println(boxes.get(index).getGreeting());
-			String result = readVoice("Please leave your message, followed by the # key to signify you are finished.");
-			if(result.equalsIgnoreCase("H")) {
-				try {hangup();}
-				catch(Exception ex) {System.out.println(ex);}
-				finally {System.exit(0);}
+			// in a completed system userIsAvailable would be set to true if the user is actually available to take calls
+			boolean userIsAvailable = false;
+			if(userIsAvailable) {
+				// connect call
 			}
 			else {
-				boxes.get(index).receiveMessage(new Message(result));
+				System.out.println("User not available. Please leave a message.");
+				System.out.println(boxes.get(index).getGreeting());
+				String result = readVoice("Please leave your message, followed by the # key to signify you are finished.");
+				if(result.equalsIgnoreCase("H")) {
+					try {hangup();}
+					catch(Exception ex) {System.out.println(ex);}
+					finally {System.exit(0);}
+				}
+				else {
+					boxes.get(index).receiveMessage(new Message(result));
+				}
 			}
 		}
 		else {
@@ -157,7 +163,6 @@ public class VoicemailSystem {
 			if(result.equals("1")) {
 				try{
 					createBox();
-					System.out.println(boxes.size());
 					try {hangup();}
 					catch(Exception ex) {System.out.println(ex);}
 					finally {System.exit(0);}
@@ -201,8 +206,14 @@ public class VoicemailSystem {
 				catch(Exception ex) {System.out.println(ex);}
 				finally {System.exit(0);}
 			}
+			else if(intext.length() == 1 && Character.isDigit(intext.charAt(0))) {
+				// do nothing because its a number
+			}
+			else if(intext.length() == 0) {
+				// do nothing because there is only white space
+			}
 			else {
-				result += intext;
+				result = result + " " + intext;
 			}
 			intext = input.nextLine();
 		}
