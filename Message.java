@@ -13,6 +13,11 @@ public class Message implements Comparable<Message>, java.io.Serializable{
 		datetime = new Date();
 	}
 	
+	public Message(String message) {
+		this.message = message;
+		datetime = new Date();
+	}
+	
 	public String getCaller() {
 		return caller;
 	}
